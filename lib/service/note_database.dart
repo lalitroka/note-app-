@@ -24,13 +24,10 @@ class NoteDatabase {
   Future<Database> initDatabase() async {
     final databasePath = await getDatabasesPath();
     final path = join(databasePath, _dbName);
-    // log('Database path: $path');
-
     return await openDatabase(
       path,
       version: 2,
       onCreate: (db, version) {
-        log('Creating database with version: $version');
         db.execute('''
           CREATE TABLE $_tableName (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -41,7 +38,6 @@ class NoteDatabase {
         ''');
       },
       onUpgrade: (db, oldVersion, newVersion) {
-        // log('Upgrading database from version $oldVersion to $newVersion');
         if (oldVersion < 2) {
           db.execute('ALTER TABLE $_tableName ADD COLUMN timestamp INTEGER');
         }
@@ -61,7 +57,6 @@ class NoteDatabase {
         },
         conflictAlgorithm: ConflictAlgorithm.replace,
       );
-      // log('Inserted note with timestamp: ${DateTime.now().millisecondsSinceEpoch}');
     } catch (e) {
       log('Error inserting note: $e');
     }
@@ -74,7 +69,6 @@ class NoteDatabase {
         _tableName,
         orderBy: 'timestamp DESC',
       );
-      // log('Fetched notes: $getnoteAsMap');
       return getnoteAsMap.map((e) => Note.fromMap(e)).toList();
     } catch (e) {
       log('Error fetching notes: $e');

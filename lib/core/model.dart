@@ -26,7 +26,7 @@ class Note {
 
   factory Note.fromMap(Map<String, dynamic> dbData) {
     return Note(
-      id: dbData['id'],
+      id: dbData['id'] ,
       title: dbData['title'],
       description: dbData['description'],
       timestamp: dbData['timestamp'],
